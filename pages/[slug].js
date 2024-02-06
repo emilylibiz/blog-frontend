@@ -3,9 +3,11 @@ import React from 'react'
 import { GET_ALL_SLUGS, GET_INDIVIDUAL_POST } from '../graphql/queries';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
+import { API_URL } from '../utils/urls';
+
 
 const client = new ApolloClient({
-    uri: "http://localhost:1337/graphql",
+    uri: API_URL,
     cache: new InMemoryCache()
 });
 

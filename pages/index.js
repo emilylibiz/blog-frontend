@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link';
 import { GET_ALL_POSTS } from '../graphql/queries';
 import { onError } from '@apollo/client/link/error';
+import { API_URL } from '../utils/urls';
 
 export default function Home({ posts }) {
   console.log("-------------------posts = ", posts);
@@ -37,25 +38,9 @@ export default function Home({ posts }) {
 export async function getStaticProps() {
 
   const client = new ApolloClient({
-    uri: "http://127.0.0.1:1337/graphql",
+    uri: API_URL,
     cache: new InMemoryCache()
   });
-
-
-  // const errorLink = onError(({ graphQLErrors, networkError }) => {
-  //   if (graphQLErrors)
-  //     graphQLErrors.forEach(({ message, locations, path }) =>
-  //       console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`),
-  //     );
-  //   if (networkError) console.log(`[Network error]: ${networkError}`);
-  // });
-  
-  // const httpLink = new HttpLink({ uri: 'http://localhost:1337/graphql' });
-  
-  // const client = new ApolloClient({
-  //   cache: new InMemoryCache(),
-  //   link: from([errorLink, httpLink]),
-  // });
 
 
 
