@@ -5,7 +5,7 @@ import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
 import { API_URL } from '../utils/urls';
 
-
+console.log("------------------API_URL =" , API_URL);
 const client = new ApolloClient({
     uri: API_URL,
     cache: new InMemoryCache()

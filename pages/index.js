@@ -6,6 +6,7 @@ import { onError } from '@apollo/client/link/error';
 import { API_URL } from '../utils/urls';
 
 export default function Home({ posts }) {
+  console.log("------------------API_URL =" , API_URL);
   console.log("-------------------posts = ", posts);
   return (
     <div>
@@ -36,7 +37,7 @@ export default function Home({ posts }) {
 }
 
 export async function getStaticProps() {
-
+  console.log("------------------API_URL =" , API_URL);
   const client = new ApolloClient({
     uri: API_URL,
     cache: new InMemoryCache()
