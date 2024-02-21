@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
+
+
 const Blogs = ({ posts }) => {
     return (
       <>
@@ -9,6 +12,14 @@ const Blogs = ({ posts }) => {
                 <Link key={i} href={post.urlSlug} legacyBehavior>
                     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                         <img src={post.picUrl} alt={post.title} className="w-full h-48 object-cover" />
+                        {/* <Image
+                          src={post.picUrl} // Make sure this is an absolute URL if the image is external
+                          alt={post.title}
+                          width={full} // Provide specific dimensions or use layout='fill'
+                          height={48} // Provide specific dimensions or use layout='fill'
+                          objectFit="cover"
+                          layout="responsive" // This can be 'fixed', 'intrinsic', 'responsive', or 'fill'
+                        /> */}
                         <div className="p-6">
                             {/* <div className="uppercase tracking-wide text-xs font-semibold bg-gray-200 text-gray-700 rounded-full px-3 py-1 inline-block">{post.category}</div> */}
                             <h2 className="group-hover:text-blue-600 text-lg leading-tight font-semibold text-gray-900 mt-2">{post.title}</h2>

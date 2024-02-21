@@ -3,10 +3,10 @@ import React from 'react'
 import { GET_ALL_SLUGS, GET_INDIVIDUAL_POST } from '../graphql/queries';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
-import { API_URL } from '../utils/urls';
+import { GRAPHQL_API_URL } from '../utils/urls';
 
 const client = new ApolloClient({
-    uri: API_URL,
+    uri: GRAPHQL_API_URL,
     cache: new InMemoryCache()
 });
 

@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, from } from '@apollo/client'
 import { GET_ALL_POSTS } from '../graphql/queries';
-import { API_URL } from '../utils/urls';
+import { GRAPHQL_API_URL, BACKEND_URL } from '../utils/urls';
 import Blogs from '../components/Blogs';
 import WelcomeBanner from '../components/WelcomeBanner';
 
@@ -17,7 +17,7 @@ export default function Home({ posts }) {
 
 export async function getStaticProps() {
   const client = new ApolloClient({
-    uri: API_URL,
+    uri: GRAPHQL_API_URL,
     cache: new InMemoryCache()
   });
 
@@ -37,7 +37,7 @@ export async function getStaticProps() {
   }
 }
 
-const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
+// const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 
 const processedPosts = (data) => {
   if (!data || !data.blogPosts || !data.blogPosts.data) {
@@ -49,7 +49,7 @@ const processedPosts = (data) => {
     title: post.attributes.title,
     description: post.attributes.description,
     urlSlug: post.attributes.urlSlug,
-    picUrl: SERVER_HOST + post.attributes.pic?.data?.attributes?.url,
+    picUrl: BACKEND_URL + post.attributes.pic?.data?.attributes?.url,
     // content: post.attributes.content,
     createdAt: post.attributes.createdAt
   }));
