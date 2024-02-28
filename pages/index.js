@@ -5,8 +5,6 @@ import Blogs from '../components/Blogs';
 import WelcomeBanner from '../components/WelcomeBanner';
 
 export default function Home({ posts }) {
-  // console.log("------------------API_URL =" , API_URL);
-  // console.log("-------------------posts = ", JSON.stringify(posts));
   return (
     <div>
       <WelcomeBanner />
@@ -28,7 +26,6 @@ export async function getStaticProps() {
   })
 
   const posts = processedPosts(data);
-  // console.log("---------  -posts : ", JSON.stringify(posts));
 
   return {
     props: {
@@ -37,7 +34,6 @@ export async function getStaticProps() {
   }
 }
 
-// const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 
 const processedPosts = (data) => {
   if (!data || !data.blogPosts || !data.blogPosts.data) {
@@ -50,7 +46,7 @@ const processedPosts = (data) => {
     description: post.attributes.description,
     urlSlug: post.attributes.urlSlug,
     picUrl: BACKEND_URL + post.attributes.pic?.data?.attributes?.url,
-    // content: post.attributes.content,
+    category: post.attributes.category,
     createdAt: post.attributes.createdAt
   }));
 
