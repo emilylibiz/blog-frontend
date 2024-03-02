@@ -10,11 +10,11 @@ const NavBar = () => {
                         <span className="text-white hover:text-gray-300 cursor-pointer">首页</span>
                     </Link>
                 </li>
-                {/* <li className="mr-6">
-                    <Link href="/postlist">
+                <li className="mr-6">
+                    <Link href="/category">
                         <span className="text-white hover:text-gray-300 cursor-pointer">博客</span>
                     </Link>
-                </li> */}
+                </li>
                 <li className="mr-6">
                     <Link href="/aboutme">
                         <span className="text-white hover:text-gray-300 cursor-pointer">关于我</span>
@@ -22,7 +22,7 @@ const NavBar = () => {
                 </li>
                 {/* <li className="mr-6">
                     <Link href="/contact">
-                        <span className="text-white hover:text-gray-300 cursor-pointer">商业合作</span>
+                        <span className="text-white hover:text-gray-300 cursor-pointer">各种创业项目</span>
                     </Link>
                 </li> */}
             </ul>

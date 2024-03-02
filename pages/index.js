@@ -46,7 +46,6 @@ const processedPosts = (data) => {
     description: post.attributes.description,
     urlSlug: post.attributes.urlSlug,
     picUrl: BACKEND_URL + post.attributes.pic?.data?.attributes?.url,
-    category: post.attributes.category,
     createdAt: post.attributes.createdAt
   }));
 

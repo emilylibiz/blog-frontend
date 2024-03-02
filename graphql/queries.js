@@ -22,7 +22,13 @@ query {
                     description
                     urlSlug
                     createdAt
-                    category
+                    tags {
+                      data {
+                        attributes {
+                          tagName
+                        }
+                      }
+                    }
                     pic {
                         data {
                           attributes {
@@ -46,7 +52,6 @@ query ($slugUrl: String!) {
           title
           content
           createdAt
-          category
         }
       }
     }
@@ -54,24 +59,55 @@ query ($slugUrl: String!) {
 `;
 
 
-const GET_POSTS_BY_CATEGORY = gql`
-  query GetPostsByCategory($category: String!) {
-    blogPosts(filters: { category: { eq: $category } }) {
+const GET_POSTS_BY_TAG = gql`
+query GetPostsByTag($tag: String!) {
+  tags(filters: { tagName: { eq: $tag } }) {
+    data {
+      attributes {
+        tagName
+        blog_posts {
+          data {
+            attributes {
+              title
+              description
+              urlSlug
+              createdAt
+              pic {
+                  data {
+                    attributes {
+                      url
+                    }
+                  }
+                }
+              tags {
+                data {
+                  attributes {
+                    tagName
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+  }
+  }
+}
+`;
+
+const GET_ALL_TAGS = gql`
+  query {
+    tags {
       data {
         attributes {
-          title
-          description
-          urlSlug
-          createdAt
-          pic {
+          tagName
+          image {
             data {
               attributes {
                 url
               }
             }
           }
-          content
-          category
         }
       }
     }
@@ -80,4 +116,5 @@ const GET_POSTS_BY_CATEGORY = gql`
 
 
 
-export { GET_ALL_POSTS, GET_INDIVIDUAL_POST, GET_ALL_SLUGS, GET_POSTS_BY_CATEGORY };
+
+export { GET_ALL_POSTS, GET_INDIVIDUAL_POST, GET_ALL_SLUGS, GET_POSTS_BY_TAG, GET_ALL_TAGS };
