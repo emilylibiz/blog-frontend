@@ -13,7 +13,6 @@ const client = new ApolloClient({
 });
 
 export default function Code({ tags }) {
-    // console.log("--------------", );
     return (
         <div className="flex flex-col items-start justify-center max-w-2xl mx-auto mb-16 my-10">
             <div className="w-full border-b border-gray-300 mb-6">

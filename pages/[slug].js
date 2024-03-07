@@ -13,15 +13,18 @@ const client = new ApolloClient({
 
 export default function Post({ post }) {
     return (
-      <div className="container mx-auto flex flex-wrap py-6">
+      <div className="container mx-auto flex flex-wrap pl-8">
        {/* Main content */}
-        <div className="w-full lg:w-2/3 flex flex-col items-start px-3">
+        <div className="w-full lg:w-2/3 flex flex-col items-start px-1">
           <div className="flex flex-col w-full mt-8">
-            <p className="text-sm text-gray-500">{new Date(post.createdAt).toLocaleDateString()}</p>
-            <h1 className="text-4xl text-black font-bold leading-none lg:leading-snug mb-2">{post.title}</h1>
-            <div className="prose">
-                <MDXRemote {...post.content} />
+            <h1 className="text-4xl text-black font-bold leading-none lg:leading-snug mb-2 py-6 ">{post.title}</h1>
+            <div className = "border-t-2 ">
+              <p className="text-sm text-gray-500 py-2 pl-2">{new Date(post.createdAt).toLocaleDateString()}</p>
+              <div className="prose px-2">
+                  <MDXRemote {...post.content} />
+              </div>
             </div>
+
           </div>
         </div>
   
@@ -70,7 +73,7 @@ export async function getStaticProps({ params }) {
             post: {
                 title: attrs.title,
                 createdAt: attrs.createdAt,
-                content: html
+                content: html,
             }
         }
     }
