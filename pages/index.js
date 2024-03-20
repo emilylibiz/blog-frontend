@@ -25,6 +25,7 @@ export async function getStaticProps() {
     query: GET_ALL_POSTS
   })
 
+  console.log("------------------data = ", data);
   const posts = processedPosts(data);
 
   return {
