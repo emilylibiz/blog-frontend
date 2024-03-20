@@ -101,13 +101,6 @@ const GET_ALL_TAGS = gql`
       data {
         attributes {
           tagName
-          image {
-            data {
-              attributes {
-                url
-              }
-            }
-          }
         }
       }
     }
