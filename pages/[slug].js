@@ -64,10 +64,12 @@ export async function getStaticProps({ params }) {
         query: GET_INDIVIDUAL_POST,
         variables: { slugUrl: params.slug }
     });
+    // console.log("---------------data =" , data); 
 
     const attrs = data.blogPosts.data[0].attributes;
 
     const html = await serialize(convertContentToMarkdown(attrs.content));
+    // console.log("---------------html =" , JSON.stringify(html)); 
     return {
         props: {
             post: {
