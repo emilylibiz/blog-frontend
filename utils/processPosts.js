@@ -11,7 +11,7 @@ export const processedPosts = (data) => {
     description: post.attributes.description,
     urlSlug: post.attributes.urlSlug,
     tags: post.attributes.tags,
-    picUrl: BACKEND_URL + post.attributes.pic?.data?.attributes?.url,
+    picUrl: post.attributes.pic?.data?.attributes?.url,
     createdAt: post.attributes.createdAt
   }));
 
