@@ -13,33 +13,42 @@ query {
 `;
 
 
- const GET_ALL_POSTS = gql`
-    query GetAllPosts {
-        blogPosts {
-            data {
-                attributes {
-                    title
-                    description
-                    urlSlug
-                    createdAt
-                    tags {
-                      data {
-                        attributes {
-                          tagName
-                        }
+const GET_ALL_POSTS = gql`
+    query GetAllPosts ($page: Int, $pageSize: Int) {
+      blogPosts (pagination: { page: $page, pageSize: $pageSize }) {
+          data {
+              id
+              attributes {
+                  title
+                  description
+                  urlSlug
+                  createdAt
+                  tags {
+                    data {
+                      attributes {
+                        tagName
                       }
                     }
-                    pic {
-                        data {
+                  }
+                  pic {
+                      data {
                           attributes {
-                            url
+                              url
                           }
-                        }
                       }
-                    content
-                }
-            }
-        }
+                  }
+                  content
+              }
+          }
+          meta {
+              pagination {
+                  page
+                  pageSize
+                  pageCount
+                  total
+              }
+          }
+      }
     }
 `;
 
@@ -60,29 +69,30 @@ query ($slugUrl: String!) {
 
 
 const GET_POSTS_BY_TAG = gql`
-query GetPostsByTag($tag: String!) {
-  tags(filters: { tagName: { eq: $tag } }) {
-    data {
-      attributes {
-        tagName
-        blog_posts {
-          data {
-            attributes {
-              title
-              description
-              urlSlug
-              createdAt
-              pic {
-                  data {
-                    attributes {
-                      url
+  query GetPostsByTag($tag: String!, $page: Int!, $pageSize: Int!) {
+    tags(filters: { tagName: { eq: $tag } }) {
+      data {
+        attributes {
+          tagName
+          blog_posts(pagination: { page: $page, pageSize: $pageSize }) {
+            data {
+              attributes {
+                title
+                description
+                urlSlug
+                createdAt
+                pic {
+                    data {
+                      attributes {
+                        url
+                      }
                     }
                   }
-                }
-              tags {
-                data {
-                  attributes {
-                    tagName
+                tags {
+                  data {
+                    attributes {
+                      tagName
+                    }
                   }
                 }
               }
@@ -90,9 +100,16 @@ query GetPostsByTag($tag: String!) {
           }
         }
       }
+      meta {
+        pagination {
+            page
+            pageSize
+            pageCount
+            total
+        }
+      }
+    }
   }
-  }
-}
 `;
 
 const GET_ALL_TAGS = gql`
