@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { GET_All_CATEGORIES, GET_ALL_TAGS } from '../../graphql/queries';
 import { GRAPHQL_API_URL, BACKEND_URL } from '../../utils/urls';
-import { categoryMapping } from '../../utils/copy';
+import { categoryMapping } from '../../utils/constants';
 
 const client = new ApolloClient({
     uri: GRAPHQL_API_URL,

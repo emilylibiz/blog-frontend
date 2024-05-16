@@ -5,7 +5,7 @@ import { GET_POSTS_BY_TAG, GET_ALL_TAGS } from '../../graphql/queries';
 import { GRAPHQL_API_URL, BACKEND_URL } from '../../utils/urls';
 import Blogs from '../../components/Blogs';
 import { processedPosts } from '../../utils/processPosts';
-import { categoryMapping } from '../../utils/copy';
+import { categoryMapping, BLOG_PAGE_SIZE } from '../../utils/constants';
 
 const client = new ApolloClient({
     uri: GRAPHQL_API_URL,
@@ -13,7 +13,9 @@ const client = new ApolloClient({
 });
 
 
-export default function Categories({ tag, posts }) {
+export default function Categories({ tag, initialPosts,
+    initialPage,
+    totalPages, }) {
     return (
 
             <div className="flex flex-col items-start justify-center max-w-2xl mx-auto mb-16 my-10">
@@ -24,7 +26,7 @@ export default function Categories({ tag, posts }) {
                 <p className='my-5'>点击阅读所有{categoryMapping[tag]}相关博文</p>
             </div>
 
-            <Blogs posts={posts} />
+            <Blogs initialPosts={initialPosts} initialPage={initialPage} totalPages={totalPages} />
         </div>
     );
 }
@@ -39,17 +41,24 @@ export async function getStaticPaths() {
     };
 }
 
+
 export async function getStaticProps({ params, preview = false }) {
     const { data } = await client.query({
         query: GET_POSTS_BY_TAG,
-        variables: { tag: params.slug }
+        variables: { tag: params.slug , page: 1, pageSize: 20 }
     });
+    
     const posts = processedPosts(data.tags.data[0].attributes.blog_posts.data);
+    const initialPosts = posts; 
+    const initialPage = data.tags.meta.page;
+    const totalPages = data.tags.meta.pageSize;
 
     return {
         props: {
             tag: params.slug, 
-            posts: posts,
+            initialPosts,
+            initialPage,
+            totalPages,
         }
     };
 }
