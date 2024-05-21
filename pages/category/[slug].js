@@ -13,7 +13,7 @@ const client = new ApolloClient({
 });
 
 
-export default function Categories({ tag, initialPosts,
+export default function Categories({ data , tag, initialPosts,
     initialPage,
     totalPages, }) {
     return (
@@ -41,17 +41,31 @@ export async function getStaticPaths() {
     };
 }
 
-
+//Todo: fix lazy implementatin that have all posts , add real pagination for that 
 export async function getStaticProps({ params, preview = false }) {
     const { data } = await client.query({
         query: GET_POSTS_BY_TAG,
-        variables: { tag: params.slug , page: 1, pageSize: 20 }
+        variables: { tag: params.slug, page: 1, pageSize: 100 }
     });
-    
-    const posts = processedPosts(data.tags.data[0].attributes.blog_posts.data);
+
+    // Ensure the tags and blog_posts data exists
+    if (data.tags.data.length === 0 || !data.tags.data[0].attributes.blog_posts) {
+        return {
+            props: {
+                tag: params.slug,
+                initialPosts: [],
+                initialPage: 1,
+                totalPages: 0,
+            },
+            revalidate: 1,  // Consider adding revalidate to enable ISR if applicable
+        };
+    }
+
+    const tagData = data.tags.data[0].attributes.blog_posts;
+    const posts = processedPosts(tagData.data);
     const initialPosts = posts; 
-    const initialPage = data.tags.meta.page;
-    const totalPages = data.tags.meta.pageSize;
+    const initialPage = data.tags.meta.pagination.page;
+    const totalPages = data.tags.meta.pagination.pageCount;
 
     return {
         props: {
@@ -59,6 +73,7 @@ export async function getStaticProps({ params, preview = false }) {
             initialPosts,
             initialPage,
             totalPages,
-        }
+        },
+        revalidate: 1  // Revalidate prop for Incremental Static Regeneration if using Next.js
     };
 }
