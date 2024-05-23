@@ -4,12 +4,13 @@ import Link from 'next/link';
 import { BLOG_PAGE_SIZE } from '../utils/constants'; 
 
 const Blogs = ({ initialPosts, initialPage, totalPages }) => {
-    const [posts, setPosts] = useState(initialPosts);
+    // Ensure initialPosts are sliced correctly for the initial state
+    const initialSubset = initialPosts.slice(0, BLOG_PAGE_SIZE);
+    const [posts, setPosts] = useState(initialSubset);
     const [page, setPage] = useState(initialPage);
 
     const handlePagination = (newPage) => {
         setPage(newPage);
-        // Here we assume initialPosts contains all posts sorted globally
         // Calculate start and end indices for the new page
         const startIndex = (newPage - 1) * BLOG_PAGE_SIZE;
         const endIndex = startIndex + BLOG_PAGE_SIZE;
