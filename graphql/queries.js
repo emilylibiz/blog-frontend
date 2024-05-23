@@ -1,16 +1,26 @@
 import { gql } from '@apollo/client';
 
+
 const GET_ALL_SLUGS = gql`
-query {
-    blogPosts {
-      data {
-        attributes {
-          urlSlug
-        }
+query GetAllSlugs($start: Int, $limit: Int) {
+  blogPosts(pagination: { start: $start, limit: $limit }) {
+    data {
+      attributes {
+        urlSlug
+      }
+    }
+    meta {
+      pagination {
+        total
+        pageSize
+        pageCount
+        page
       }
     }
   }
+}
 `;
+
 
 
 const GET_ALL_POSTS = gql`
@@ -37,7 +47,6 @@ const GET_ALL_POSTS = gql`
                           }
                       }
                   }
-                  content
               }
           }
           meta {

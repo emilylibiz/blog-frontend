@@ -45,31 +45,41 @@ export default function Post({ post }) {
     );
   }
 
-export async function getStaticPaths() {
-
-    const { data } = await client.query({ query: GET_ALL_SLUGS });
-
-    const paths = data.blogPosts.data.map((post) => {
-        return { params: { slug: post.attributes.urlSlug } }
-    });
-
+  export async function getStaticPaths() {
+    let slugs = [];
+    let page = 1;
+    let totalPages = 1;
+  
+    do {
+      const { data } = await client.query({
+        query: GET_ALL_SLUGS,
+        variables: {
+          start: (page - 1) * 10,  // assuming the default limit is 10
+          limit: 10
+        }
+      });
+      
+      slugs = slugs.concat(data.blogPosts.data.map(post => ({
+        params: { slug: post.attributes.urlSlug }
+      })));
+  
+      totalPages = Math.ceil(data.blogPosts.meta.pagination.total / 10); // Adjust based on actual meta data
+      page++;
+    } while (page <= totalPages);
+  
     return {
-        paths,
-        fallback: false
-    }
-}
-
+      paths: slugs,
+      fallback: false
+    };
+  }
 export async function getStaticProps({ params }) {
     const { data } = await client.query({
         query: GET_INDIVIDUAL_POST,
         variables: { slugUrl: params.slug }
     });
-    // console.log("---------------data =" , data); 
 
     const attrs = data.blogPosts.data[0].attributes;
-
     const html = await serialize(convertContentToMarkdown(attrs.content));
-    // console.log("---------------html =" , JSON.stringify(html)); 
     return {
         props: {
             post: {
@@ -91,7 +101,6 @@ function convertContentToMarkdown(blocks) {
             : BACKEND_URL + block.image.formats.small.url;
           const altText = block.image.alternativeText || 'image';
           return `![${altText}](${imageUrl})`;
-          // return <img src={imageUrl} alt={altText} />;
         case 'paragraph':
           return block.children.map(child => child.text).join('');
         case 'list':
