@@ -1,43 +1,21 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { GRAPHQL_API_URL } from '../utils/urls';
-import { GET_ALL_POSTS } from '../graphql/queries';
 import { BLOG_PAGE_SIZE } from '../utils/constants'; 
 
 const Blogs = ({ initialPosts, initialPage, totalPages }) => {
     const [posts, setPosts] = useState(initialPosts);
     const [page, setPage] = useState(initialPage);
-    const [loading, setLoading] = useState(false);
 
-    const fetchPosts = async (page) => {
-        setLoading(true);
-        const client = new ApolloClient({
-            uri: GRAPHQL_API_URL,
-            cache: new InMemoryCache()
-        });
-
-        try {
-            const { data, errors } = await client.query({
-                query: GET_ALL_POSTS,
-                variables: { page: page, pageSize: BLOG_PAGE_SIZE }
-            });
-
-            if (errors) {
-                console.error("GraphQL errors: ", errors);
-                setLoading(false);
-                return;
-            }
-
-            const newPosts = processedPosts(data);
-            setPosts(newPosts);
-            setPage(page);
-            setLoading(false);
-        } catch (error) {
-            console.error("Error fetching posts: ", error);
-            setLoading(false);
-        }
+    const handlePagination = (newPage) => {
+        setPage(newPage);
+        // Here we assume initialPosts contains all posts sorted globally
+        // Calculate start and end indices for the new page
+        const startIndex = (newPage - 1) * BLOG_PAGE_SIZE;
+        const endIndex = startIndex + BLOG_PAGE_SIZE;
+        // Slice the global post list to get only posts for the new page
+        const newPosts = initialPosts.slice(startIndex, endIndex);
+        setPosts(newPosts);
     };
 
     const renderPagination = () => {
@@ -47,8 +25,7 @@ const Blogs = ({ initialPosts, initialPage, totalPages }) => {
                 <button
                     key={i}
                     className={`px-3 py-1 mx-1 ${i === page ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                    onClick={() => fetchPosts(i)}
-                    disabled={loading}>
+                    onClick={() => handlePagination(i)}>
                     {i}
                 </button>
             );
@@ -89,28 +66,6 @@ const Blogs = ({ initialPosts, initialPage, totalPages }) => {
             </div>
         </div>
     );
-};
-
-const processedPosts = (data) => {
-  if (!data || !data.blogPosts || !data.blogPosts.data) {
-    return [];
-  }
-
-  const processedPosts = data.blogPosts.data.map(post => ({
-    id: post.id,
-    title: post.attributes.title,
-    description: post.attributes.description,
-    urlSlug: post.attributes.urlSlug,
-    picUrl: post.attributes.pic?.data?.attributes?.url,
-    createdAt: post.attributes.createdAt
-  }));
-
-  processedPosts.sort((a, b) => {
-    const dateA = new Date(a.createdAt);
-    const dateB = new Date(b.createdAt);
-    return dateB - dateA; // for descending order
-  });
-  return processedPosts;
 };
 
 export default Blogs;
