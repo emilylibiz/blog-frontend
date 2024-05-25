@@ -36,9 +36,9 @@ export default function Post({ post }) {
             我是一个身兼数职的普通妈妈： 既是自己小企业的掌舵人，又是科技大厂写代码的软件工程师，还是孩子们依赖的妈咪，每一天都在不同的角色间切换，迎接着新的挑战与机遇。 
           </p>
           <div className="flex justify-center">
-              <a href="/aboutme" className="text-sm inline-block bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-base">
+              <Link href="/aboutme" className="text-sm inline-block bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-base">
                   了解更多
-              </a>
+              </Link>
           </div>
         </div>
       </div>
