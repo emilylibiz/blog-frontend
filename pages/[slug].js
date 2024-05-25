@@ -29,7 +29,13 @@ export default function Post({ post }) {
       <div className="w-full lg:w-1/4 lg:pl-4">
         <div className="sticky top-20 p-6 bg-white shadow-lg rounded-lg bg-gray-100 p-4 rounded-lg shadow-inner">
           <div className="text-center mb-6 ">
-            <img src="/emily.png" alt="Jaden" className="rounded-full w-32 h-32 mx-auto mb-4"/>
+            <Image
+              src="/emily.png"
+              alt="Emily"
+              width={128} // Corresponds to the desired width in pixels
+              height={128} // Corresponds to the desired height in pixels
+              className="rounded-full mx-auto mb-4"
+            />
             <h2 className="text-xl font-semibold">Hi! I&apos;m Emily!</h2>
             <p className="text-gray-600 text-sm ">欢迎来到我的博客</p>
           </div>
