@@ -30,7 +30,7 @@ export default function Post({ post }) {
         <div className="sticky top-20 p-6 bg-white shadow-lg rounded-lg bg-gray-100 p-4 rounded-lg shadow-inner">
           <div className="text-center mb-6 ">
             <Image
-              src="/emily.png"
+              src="/Emily.png"
               alt="Emily"
               width={128} // Corresponds to the desired width in pixels
               height={128} // Corresponds to the desired height in pixels
