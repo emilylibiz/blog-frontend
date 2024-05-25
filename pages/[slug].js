@@ -92,7 +92,7 @@ export async function getStaticProps({ params }) {
 }
 
 
-function convertContentToMarkdown(blocks) {
+function convertContentToMarkdown1(blocks) {
     return blocks.map(block => {
       switch (block.type) {
         case 'image' :
@@ -103,6 +103,10 @@ function convertContentToMarkdown(blocks) {
           return `![${altText}](${imageUrl})`;
         case 'paragraph':
           return block.children.map(child => child.text).join('');
+        case 'link':  // Assuming 'link' is a type in your data blocks
+          const url = block.url.startsWith('http') ? block.url : BACKEND_URL + block.url;
+          const text = block.text || url; // Use URL as text if no text provided
+          return `[${text}](${url})`;
         case 'list':
           if (block.format === 'unordered') {
             return block.children.map(item => `* ${item.children.map(child => child.text).join('')}`).join('\n');
@@ -117,3 +121,41 @@ function convertContentToMarkdown(blocks) {
     }).join('\n\n');
   }
   
+
+  function convertContentToMarkdown(blocks) {
+    // Function to process text and nested elements like links
+    const processTextElements = (elements) => {
+        return elements.map(element => {
+            if (element.type === 'text') {
+                return element.text;
+            } else if (element.type === 'link') {
+              const linkText = element.children.map(child => child.text).join('');
+              // Format it as a markdown link
+              return `[${linkText}](${element.url})`;
+            }
+            return ''; // Return an empty string for unsupported types
+        }).join('');
+    };
+
+    return blocks.map(block => {
+        switch (block.type) {
+            case 'paragraph':
+                return processTextElements(block.children);
+            case 'image':
+                const imageUrl = block.image.url.startsWith('http')
+                    ? block.image.url
+                    : BACKEND_URL + block.image.url;
+                const altText = block.image.alternativeText || 'image';
+                return `![${altText}](${imageUrl})`;
+            case 'list':
+                if (block.format === 'unordered') {
+                    return block.children.map(item => `* ${processTextElements(item.children)}`).join('\n');
+                } else {
+                    // For ordered lists
+                    return block.children.map((item, index) => `${index + 1}. ${processTextElements(item.children)}`).join('\n');
+                }
+            default:
+                return ''; // Handle other types similarly if needed
+        }
+    }).join('\n\n');
+}
