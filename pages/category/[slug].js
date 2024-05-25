@@ -13,12 +13,11 @@ const client = new ApolloClient({
 });
 
 
-export default function Categories({ data , tag, initialPosts,
+export default function Categories({tag, initialPosts,
     initialPage,
     totalPages, }) {
     return (
-
-            <div className="flex flex-col items-start justify-center max-w-2xl mx-auto mb-16 my-10">
+        <div className="flex flex-col items-start justify-center max-w-2xl md:max-w-4xl lg:max-w-6xl mx-auto mb-16 my-10 px-10">
             <div className="w-full border-b border-gray-300 mb-6">
                 <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">
                 {categoryMapping[tag]}
@@ -41,7 +40,6 @@ export async function getStaticPaths() {
     };
 }
 
-//Todo: fix lazy implementatin that have all posts , add real pagination for that 
 export async function getStaticProps({ params, preview = false }) {
     const { data } = await client.query({
         query: GET_POSTS_BY_TAG,
@@ -65,7 +63,7 @@ export async function getStaticProps({ params, preview = false }) {
     const posts = processedPosts(tagData.data);
     const initialPosts = posts; 
     const initialPage = data.tags.meta.pagination.page;
-    const totalPages = data.tags.meta.pagination.pageCount;
+    const totalPages = Math.ceil(posts.length / BLOG_PAGE_SIZE);
 
     return {
         props: {

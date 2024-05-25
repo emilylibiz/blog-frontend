@@ -15,7 +15,7 @@ const client = new ApolloClient({
 
 export default function Post({ post }) {
   return (
-    <div className="container mx-auto flex flex-wrap pt-8 px-16 lg:px-0">
+    <div className="container mx-auto flex flex-wrap pt-8 px-8 lg:px-0">
       {/* Main Content */}
       <div className="w-full lg:w-3/4 px-4 lg:pr-10">
         <h1 className="text-3xl lg:text-4xl font-bold mb-6">{post.title}</h1>
@@ -27,7 +27,7 @@ export default function Post({ post }) {
       
       {/* Sidebar */}
       <div className="w-full lg:w-1/4 lg:pl-4">
-        <div className="sticky top-20 p-6 bg-white shadow-lg rounded-lg bg-gray-100 p-4 rounded-lg shadow-inner">
+        <div className="sticky top-20 p-6 bg-white shadow-lg rounded-lg bg-gray-300 p-4 rounded-lg shadow-inner">
           <div className="text-center mb-6 ">
             <Image
               src="/Emily.png"
