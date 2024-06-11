@@ -1,22 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BLOG_PAGE_SIZE } from '../utils/constants'; 
+import { useRouter } from 'next/router';
 
 const Blogs = ({ initialPosts, initialPage, totalPages }) => {
+    const router = useRouter();
+    // Get the page from URL or use the initial page
+    const pageFromUrl = parseInt(router.query.page) || initialPage;
+
     // Ensure initialPosts are sliced correctly for the initial state
     const initialSubset = initialPosts.slice(0, BLOG_PAGE_SIZE);
-    const [posts, setPosts] = useState(initialSubset);
-    const [page, setPage] = useState(initialPage);
+
+    const [posts, setPosts] = useState([]);
+    const [page, setPage] = useState(pageFromUrl);
+
+    useEffect(() => {
+        const startIndex = (page - 1) * BLOG_PAGE_SIZE;
+        const endIndex = startIndex + BLOG_PAGE_SIZE;
+        setPosts(initialPosts.slice(startIndex, endIndex));
+    }, [page, initialPosts]);
+
 
     const handlePagination = (newPage) => {
         setPage(newPage);
-        // Calculate start and end indices for the new page
-        const startIndex = (newPage - 1) * BLOG_PAGE_SIZE;
-        const endIndex = startIndex + BLOG_PAGE_SIZE;
-        // Slice the global post list to get only posts for the new page
-        const newPosts = initialPosts.slice(startIndex, endIndex);
-        setPosts(newPosts);
+        router.push(`/?page=${newPage}`, undefined, { shallow: true });
     };
 
     const renderPagination = () => {
