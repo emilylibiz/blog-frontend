@@ -6,6 +6,7 @@ import { MDXRemote } from 'next-mdx-remote';
 import { GRAPHQL_API_URL , BACKEND_URL} from '../utils/urls';
 import Link from 'next/link';
 import Image from 'next/image';
+import Seo from '../components/seo';
 
 const client = new ApolloClient({
     uri: GRAPHQL_API_URL,
@@ -14,8 +15,17 @@ const client = new ApolloClient({
 
 
 export default function Post({ post }) {
+
+  const seo = {
+    metaTitle: post.title,
+    metaDescription: post.description,
+    shareImage: post.image,
+    article: true,
+  }
+
   return (
     <div className="container mx-auto flex flex-wrap pt-8 px-8 lg:px-0">
+       <Seo seo={seo} />
       {/* Main Content */}
       <div className="w-full lg:w-3/4 px-4 lg:pr-10">
         <h1 className="text-3xl lg:text-4xl font-bold mb-6">{post.title}</h1>

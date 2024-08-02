@@ -4,11 +4,13 @@ import { GRAPHQL_API_URL, BACKEND_URL } from '../utils/urls';
 import Blogs from '../components/Blogs';
 import WelcomeBanner from '../components/WelcomeBanner';
 import { BLOG_PAGE_SIZE } from '../utils/constants'; 
+import Seo from '../components/seo';
 
 export default function Home({ initialPosts, initialPage, totalPages  }) {
   // console.log("----initialPosts =" , initialPosts); 
   return (
     <div>
+      <Seo/> 
       <WelcomeBanner />
       <Blogs initialPosts={initialPosts} initialPage={initialPage} totalPages={totalPages}  />
     </div>

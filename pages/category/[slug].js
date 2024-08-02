@@ -6,6 +6,7 @@ import { GRAPHQL_API_URL, BACKEND_URL } from '../../utils/urls';
 import Blogs from '../../components/Blogs';
 import { processedPosts } from '../../utils/processPosts';
 import { categoryMapping, BLOG_PAGE_SIZE } from '../../utils/constants';
+import Seo from '../../components/seo';
 
 const client = new ApolloClient({
     uri: GRAPHQL_API_URL,
@@ -16,8 +17,15 @@ const client = new ApolloClient({
 export default function Categories({tag, initialPosts,
     initialPage,
     totalPages, }) {
+        const seo = {
+            metaTitle: categoryMapping[tag],
+            metaDescription: categoryMapping[tag],
+          }
+
     return (
+        
         <div className="flex flex-col items-start justify-center max-w-2xl md:max-w-4xl lg:max-w-6xl mx-auto mb-16 my-10 px-10">
+             <Seo seo={seo} />
             <div className="w-full border-b border-gray-300 mb-6">
                 <h1 className="mb-4 text-3xl font-bold tracking-tight text-black md:text-5xl dark:text-white">
                 {categoryMapping[tag]}
