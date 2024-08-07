@@ -5,10 +5,17 @@ const HEROKU_SITEMAP_URL = 'https://emily-blog-backend-eedb993a47c4.herokuapp.co
 export default async (req, res) => {
   try {
     const response = await fetch(HEROKU_SITEMAP_URL);
+
     if (!response.ok) {
-      throw new Error('Failed to fetch sitemap from Heroku');
+      const errorDetails = await response.text();
+      console.error('Failed to fetch sitemap from Heroku:', errorDetails);
+      res.status(response.status).send(`Failed to fetch sitemap from Heroku: ${response.status} ${response.statusText}`);
+      return;
     }
+
     const sitemap = await response.text();
+
+    console.log('Sitemap content:', sitemap);
 
     res.setHeader('Content-Type', 'application/xml');
     res.status(200).send(sitemap);
