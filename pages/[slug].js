@@ -23,6 +23,8 @@ export default function Post({ post }) {
     article: true,
   }
 
+  // console.log("----post =" , post); 
+
   return (
     <div className="container mx-auto flex flex-wrap pt-8 px-8 lg:px-0">
        <Seo seo={seo} />
@@ -80,7 +82,7 @@ export default function Post({ post }) {
       slugs = slugs.concat(data.blogPosts.data.map(post => ({
         params: { slug: post.attributes.urlSlug }
       })));
-  
+      console.log("---------------------blog slugs = ", slugs)
       totalPages = Math.ceil(data.blogPosts.meta.pagination.total / 10); // Adjust based on actual meta data
       page++;
     } while (page <= totalPages);
@@ -95,7 +97,7 @@ export async function getStaticProps({ params }) {
         query: GET_INDIVIDUAL_POST,
         variables: { slugUrl: params.slug }
     });
-
+    console.log("---------------------blog data = ", data)
     const attrs = data.blogPosts.data[0].attributes;
     const html = await serialize(convertContentToMarkdown(attrs.content));
     return {
