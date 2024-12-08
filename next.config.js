@@ -13,15 +13,13 @@ const nextConfig = {
   },
   async rewrites() {
     return [
+      // Rewrite specifically for the sitemap
       {
         source: "/sitemap.xml",
-        destination: "/api/sitemap", // Maps /sitemap.xml to /api/sitemap
-      },
-      // Proxy all API requests to the backend
-      {
-        source: "/api/:path*",
         destination:
-          "https://emily-blog-backend-eedb993a47c4.herokuapp.com/api/:path*",
+          process.env.NODE_ENV === "production"
+            ? "https://emily-blog-backend-eedb993a47c4.herokuapp.com/api/sitemap/index.xml" // Production sitemap
+            : "/api/sitemap", // Local sitemap handled via API route
       },
     ];
   },
