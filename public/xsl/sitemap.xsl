@@ -1,0 +1,3 @@
+public/
+  xsl/
+    sitemap.xsl
