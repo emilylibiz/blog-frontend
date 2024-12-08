@@ -13,13 +13,9 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      // Rewrite specifically for the sitemap
       {
         source: "/sitemap.xml",
-        destination:
-          process.env.NODE_ENV === "production"
-            ? "https://emily-blog-backend-eedb993a47c4.herokuapp.com/api/sitemap/index.xml" // Production sitemap
-            : "/api/sitemap", // Local sitemap handled via API route
+        destination: "/api/sitemap",
       },
     ];
   },
