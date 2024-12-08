@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /admin/
 
-Sitemap: https://www.theparttimemillionaire.com/api/sitemap
+Sitemap: https://www.theparttimemillionaire.com/api/sitemap.xml

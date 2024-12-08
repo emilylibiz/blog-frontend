@@ -41,6 +41,8 @@ const Blogs = ({ initialPosts, initialPage, totalPages }) => {
         }
         return pages;
     };
+    // console.log("----posts =" , posts); 
+    // console.log("----page =" , page); 
 
     return (
         <div className="container mx-auto px-4">

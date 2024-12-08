@@ -8,6 +8,7 @@ import Seo from '../components/seo';
 
 export default function Home({ initialPosts, initialPage, totalPages  }) {
   // console.log("----initialPosts =" , initialPosts); 
+  // console.log("----initialPage =" , initialPage); 
   return (
     <div>
       <Seo/> 
