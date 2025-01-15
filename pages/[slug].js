@@ -105,13 +105,13 @@ export async function getStaticProps({ params }) {
   });
   // console.log("---------------------blog data = ", data)
   const attrs = data.blogPosts.data[0].attributes;
-  const html = await serialize(convertContentToMarkdown(attrs.content));
+  const mdxSource = await serialize(attrs.content);
   return {
     props: {
       post: {
         title: attrs.title,
         createdAt: attrs.createdAt,
-        content: html,
+        content: mdxSource,
       },
     },
   };

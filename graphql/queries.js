@@ -1,69 +1,65 @@
-import { gql } from '@apollo/client';
-
+import { gql } from "@apollo/client";
 
 const GET_ALL_SLUGS = gql`
-query GetAllSlugs($start: Int, $limit: Int) {
-  blogPosts(pagination: { start: $start, limit: $limit }) {
-    data {
-      attributes {
-        urlSlug
+  query GetAllSlugs($start: Int, $limit: Int) {
+    blogPosts(pagination: { start: $start, limit: $limit }) {
+      data {
+        attributes {
+          urlSlug
+        }
       }
-    }
-    meta {
-      pagination {
-        total
-        pageSize
-        pageCount
-        page
+      meta {
+        pagination {
+          total
+          pageSize
+          pageCount
+          page
+        }
       }
     }
   }
-}
 `;
-
-
 
 const GET_ALL_POSTS = gql`
-    query GetAllPosts ($page: Int, $pageSize: Int) {
-      blogPosts (pagination: { page: $page, pageSize: $pageSize }) {
-          data {
-              id
+  query GetAllPosts($page: Int, $pageSize: Int) {
+    blogPosts(pagination: { page: $page, pageSize: $pageSize }) {
+      data {
+        id
+        attributes {
+          title
+          description
+          urlSlug
+          createdAt
+          tags {
+            data {
               attributes {
-                  title
-                  description
-                  urlSlug
-                  createdAt
-                  tags {
-                    data {
-                      attributes {
-                        tagName
-                      }
-                    }
-                  }
-                  pic {
-                      data {
-                          attributes {
-                              url
-                          }
-                      }
-                  }
+                tagName
               }
+            }
           }
-          meta {
-              pagination {
-                  page
-                  pageSize
-                  pageCount
-                  total
+          pic {
+            data {
+              attributes {
+                url
               }
+            }
           }
+        }
+      }
+      meta {
+        pagination {
+          page
+          pageSize
+          pageCount
+          total
+        }
       }
     }
+  }
 `;
 
-
 const GET_INDIVIDUAL_POST = gql`
-query ($slugUrl: String!) {
+  query ($slugUrl: String!) {
     blogPosts(filters: { urlSlug: { eq: $slugUrl } }) {
       data {
         attributes {
@@ -75,7 +71,6 @@ query ($slugUrl: String!) {
     }
   }
 `;
-
 
 const GET_POSTS_BY_TAG = gql`
   query GetPostsByTag($tag: String!, $page: Int!, $pageSize: Int!) {
@@ -91,12 +86,12 @@ const GET_POSTS_BY_TAG = gql`
                 urlSlug
                 createdAt
                 pic {
-                    data {
-                      attributes {
-                        url
-                      }
+                  data {
+                    attributes {
+                      url
                     }
                   }
+                }
                 tags {
                   data {
                     attributes {
@@ -111,10 +106,10 @@ const GET_POSTS_BY_TAG = gql`
       }
       meta {
         pagination {
-            page
-            pageSize
-            pageCount
-            total
+          page
+          pageSize
+          pageCount
+          total
         }
       }
     }
@@ -133,7 +128,10 @@ const GET_ALL_TAGS = gql`
   }
 `;
 
-
-
-
-export { GET_ALL_POSTS, GET_INDIVIDUAL_POST, GET_ALL_SLUGS, GET_POSTS_BY_TAG, GET_ALL_TAGS };
+export {
+  GET_ALL_POSTS,
+  GET_INDIVIDUAL_POST,
+  GET_ALL_SLUGS,
+  GET_POSTS_BY_TAG,
+  GET_ALL_TAGS,
+};
