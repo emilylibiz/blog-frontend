@@ -20,6 +20,27 @@ const GET_ALL_SLUGS = gql`
   }
 `;
 
+const GET_ALL_SLUGS_AND_TITLES = gql`
+  query GetAllSlugs($start: Int, $limit: Int) {
+    blogPosts(pagination: { start: $start, limit: $limit }) {
+      data {
+        attributes {
+          title
+          urlSlug
+        }
+      }
+      meta {
+        pagination {
+          total
+          pageSize
+          pageCount
+          page
+        }
+      }
+    }
+  }
+`;
+
 const GET_ALL_POSTS = gql`
   query GetAllPosts($page: Int, $pageSize: Int) {
     blogPosts(pagination: { page: $page, pageSize: $pageSize }) {
@@ -134,4 +155,5 @@ export {
   GET_ALL_SLUGS,
   GET_POSTS_BY_TAG,
   GET_ALL_TAGS,
+  GET_ALL_SLUGS_AND_TITLES,
 };

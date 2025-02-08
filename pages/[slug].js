@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { useRouter } from "next/router";
 import React from "react";
-import { GET_ALL_SLUGS, GET_INDIVIDUAL_POST } from "../graphql/queries";
+import { GET_ALL_SLUGS, GET_INDIVIDUAL_POST, GET_ALL_SLUGS_AND_TITLES } from "../graphql/queries";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote } from "next-mdx-remote";
 import { GRAPHQL_API_URL, BACKEND_URL } from "../utils/urls";
@@ -13,15 +14,15 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export default function Post({ post }) {
+export default function Post({ post, previousPost, nextPost }) {
+
   const seo = {
     metaTitle: post.title,
     metaDescription: post.description,
     shareImage: post.image,
     article: true,
   };
-
-  // console.log("----post =" , post);
+ 
 
   return (
     <div className="container mx-auto flex flex-wrap pt-8 px-8 lg:px-0">
@@ -35,6 +36,25 @@ export default function Post({ post }) {
         <div className="prose lg:prose-lg max-w-none pb-16">
           <MDXRemote {...post.content} />
         </div>
+
+        {/* Previous and Next Blog Links */}
+        <div className="flex justify-between mt-8">
+          {previousPost && (
+            <Link href={`/${previousPost.urlSlug}`} legacyBehavior>
+              <a className="text-blue-500 hover:text-blue-700">
+                ← {previousPost.title}
+              </a>
+            </Link>
+          )}
+          {nextPost && (
+            <Link href={`/${nextPost.urlSlug}`} legacyBehavior>
+              <a className="text-blue-500 hover:text-blue-700">
+              {nextPost.title} →
+              </a>
+            </Link>
+          )}
+        </div>
+
       </div>
 
       {/* Sidebar */}
@@ -106,6 +126,27 @@ export async function getStaticProps({ params }) {
   // console.log("---------------------blog data = ", data)
   const attrs = data.blogPosts.data[0].attributes;
   const mdxSource = await serialize(attrs.content);
+
+    // Fetch all posts to determine previous and next posts
+    const { data: allPostsData } = await client.query({
+      query: GET_ALL_SLUGS_AND_TITLES,
+      variables: {
+        start: 0,
+        limit: 1000, // Fetch all posts (adjust based on your total number of posts)
+      },
+    });
+  
+    const allPosts = allPostsData.blogPosts.data;
+    const currentIndex = allPosts.findIndex(
+      (post) => post.attributes.urlSlug === params.slug
+    );
+  
+    const previousPost =
+      currentIndex > 0 ? allPosts[currentIndex - 1].attributes : null;
+    const nextPost =
+      currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1].attributes : null;
+
+      
   return {
     props: {
       post: {
@@ -113,55 +154,9 @@ export async function getStaticProps({ params }) {
         createdAt: attrs.createdAt,
         content: mdxSource,
       },
+      previousPost,
+      nextPost,
     },
   };
 }
 
-function convertContentToMarkdown(blocks) {
-  // Function to process text and nested elements like links
-  const processTextElements = (elements) => {
-    return elements
-      .map((element) => {
-        if (element.type === "text") {
-          return element.text;
-        } else if (element.type === "link") {
-          const linkText = element.children.map((child) => child.text).join("");
-          // Format it as a markdown link
-          return `[${linkText}](${element.url})`;
-        }
-        return ""; // Return an empty string for unsupported types
-      })
-      .join("");
-  };
-
-  return blocks
-    .map((block) => {
-      switch (block.type) {
-        case "paragraph":
-          return processTextElements(block.children);
-        case "image":
-          const imageUrl = block.image.url.startsWith("http")
-            ? block.image.url
-            : BACKEND_URL + block.image.url;
-          const altText = block.image.alternativeText || "image";
-          return `![${altText}](${imageUrl})`;
-        case "list":
-          if (block.format === "unordered") {
-            return block.children
-              .map((item) => `* ${processTextElements(item.children)}`)
-              .join("\n");
-          } else {
-            // For ordered lists
-            return block.children
-              .map(
-                (item, index) =>
-                  `${index + 1}. ${processTextElements(item.children)}`
-              )
-              .join("\n");
-          }
-        default:
-          return ""; // Handle other types similarly if needed
-      }
-    })
-    .join("\n\n");
-}
