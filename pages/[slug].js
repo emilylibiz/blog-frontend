@@ -1,5 +1,4 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { useRouter } from "next/router";
 import React from "react";
 import { GET_ALL_SLUGS, GET_INDIVIDUAL_POST, GET_ALL_SLUGS_AND_TITLES } from "../graphql/queries";
 import { serialize } from "next-mdx-remote/serialize";
@@ -38,7 +37,7 @@ export default function Post({ post, previousPost, nextPost }) {
         </div>
 
         {/* Previous and Next Blog Links */}
-        <div className="flex justify-between mt-8">
+        <div className="flex justify-between mt-8 pb-12">
           {previousPost && (
             <Link href={`/${previousPost.urlSlug}`} legacyBehavior>
               <a className="text-blue-500 hover:text-blue-700">
