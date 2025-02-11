@@ -22,11 +22,12 @@ const GET_ALL_SLUGS = gql`
 
 const GET_ALL_SLUGS_AND_TITLES = gql`
   query GetAllSlugs($start: Int, $limit: Int) {
-    blogPosts(pagination: { start: $start, limit: $limit }) {
+    blogPosts(pagination: { start: $start, limit: $limit }, sort: "createdAt:desc") {
       data {
         attributes {
           title
           urlSlug
+          createdAt
         }
       }
       meta {
